@@ -65,8 +65,23 @@ phylum_chart <- function(file) {
       plot.margin = margin(l = 0 + margin_spacer(df_final$Amostra), t = 15)
     )
 
+    theme_jack <- function (base_size = 12, base_family = "") {
+    theme_gray(base_size = base_size, base_family = base_family) %+replace% 
+        theme(
+            axis.text = element_text(colour = "white"),
+            axis.title.x = element_text(colour = "pink", size=rel(3)),
+            axis.title.y = element_text(colour = "blue", angle=45),
+            panel.background = element_rect(fill="green"),
+            panel.grid.minor.y = element_line(size=3),
+            panel.grid.major = element_line(colour = "orange"),
+            plot.background = element_rect(fill="red")
+    )   
+}
+
+#E3EBF5
+  p <- p + theme(panel.background = element_rect(fill='#E3EBF5', colour='#E3EBF5'), panel.grid.major = element_line(colour = "gray"), plot.background = element_rect(fill="#E3EBF5"))
   # Salvando o gráfico com uma largura maior (por exemplo, 12 polegadas)
-  ggsave("amostras.jpg", device='jpg', plot = p, width = 12, height = 6)
+  ggsave("amostras.jpg", device='jpg', plot = p, width = 6, height = 6)
   
 }
 
@@ -183,7 +198,7 @@ meta_charts <- function(file, meta_file) {
 
 
 # Executar as funções
-phylum_chart('lib3_stamp.tsv')
-meta_charts('lib3_stamp.tsv', 'meta_v5.tsv')
+phylum_chart('madu_temp/madu_bac_stamp.tsv')
+# meta_charts('output/LIB3/lib3_stamp.tsv', 'input/meta_v5.txt')
 
 # test('lib3_stamp.tsv')

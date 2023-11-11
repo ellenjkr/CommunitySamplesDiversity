@@ -5,19 +5,19 @@ import concurrent.futures
 import threading
 
 
-for pos, file in enumerate(os.listdir('output/LIB3_04')):
+for pos, file in enumerate(os.listdir('output/test')):
 	
 	if pos == 1:
 		file_name2 = file.replace('blast_statistics_', '')
 		file_name2 = file_name2.replace('.xlsx', '')
-		df2 = pd.read_excel(f"output/LIB3_04/{file}")
+		df2 = pd.read_excel(f"output/test/{file}")
 		merged_df = df.merge(df2, on='Blast', how='outer').fillna(0)
 		merged_df.columns = ['Blast', file_name, file_name2]
 		file_name = file_name2
 	elif pos > 1:
 		file_name2 = file.replace('blast_statistics_', '')
 		file_name2 = file_name2.replace('.xlsx', '')
-		df2 = pd.read_excel(f"output/LIB3_04/{file}")
+		df2 = pd.read_excel(f"output/test/{file}", engine='openpyxl')
 		merged_df = merged_df.merge(df2, on='Blast', how='outer').fillna(0)
 
 		merged_df.columns = list(merged_df.columns)[:-1] + [file_name2]
@@ -25,9 +25,8 @@ for pos, file in enumerate(os.listdir('output/LIB3_04')):
 	else:
 		file_name = file.replace('blast_statistics_', '')
 		file_name = file_name.replace('.xlsx', '')
-		df = pd.read_excel(f"output/LIB3_04/{file}")
+		df = pd.read_excel(f"output/test/{file}")
 
-print(merged_df)
 
 
 
@@ -40,7 +39,7 @@ def get_organism_taxid(organism, cursor):
 
 	taxid = result['tax_id']
 	name_txt = result['name_txt']
-
+ 
 	return taxid, name_txt
 
 
@@ -60,6 +59,7 @@ def get_taxonomy(especie):
 		with connection.cursor() as cursor:
 			try:
 				taxid, name_txt = get_organism_taxid(especie, cursor)
+				print(taxid)
 				
 				cursor.execute(f"SELECT * FROM organisms WHERE tax_id = {taxid} LIMIT 1")
 				# cursor.execute(f"SELECT * FROM organisms WHERE MATCH(tax_name) AGAINST('{especie}' IN NATURAL LANGUAGE MODE)")
@@ -113,5 +113,5 @@ output_df['Genero'][output_df.loc[output_df['Familia'] == 'unclassified'].index]
 output_df['Especie'][output_df.loc[output_df['Genero'] == 'unclassified'].index] = 'unclassified'
 
 
-output_df.to_csv('output/LIB3_04/lib4_stamp.tsv', sep='\t', index=False)
+output_df.to_csv('output/test/stamp.tsv', sep='\t', index=False)
 #output_df.to_csv('Juliana - Taxonomias - Com Referência.tsv', sep='\t', index=False)

@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 def phylum_chart(file):
     df = pd.read_csv(file, sep='\t')
     df = df.groupby('Filo').sum().reset_index()
+    df = df.drop(['Super-Reino', 'Classe', 'Ordem', 'Familia', 'Genero', 'Especie'], axis=1)
+
     for col in df.columns:
         if col != "Filo":
             soma = df[col].sum()
@@ -13,7 +15,6 @@ def phylum_chart(file):
 
     amostras = df.iloc[:, 1:]
     amostras = amostras.T
-
 
     #plt.style.use('ggplot')
 
@@ -41,14 +42,18 @@ def phylum_chart(file):
 def meta_charts(file, meta_file):
     samples_df = pd.read_csv(file, sep='\t')
     samples_df = samples_df.groupby('Filo').sum().reset_index()
+    samples_df = samples_df.drop(['Super-Reino', 'Classe', 'Ordem', 'Familia', 'Genero', 'Especie'], axis=1)
 
-    meta = pd.read_csv('meta_v5.tsv', sep='\t')
+    meta = pd.read_csv('input/meta_v5.txt', sep='\t')
 
     for category in meta[meta.columns[1:]]:
         df_values_melted = samples_df.melt(id_vars='Filo', var_name='sample', value_name='valor')
+
+        print(df_values_melted['sample'])
+        print(meta['sample'])
         df_merged = pd.merge(df_values_melted, meta, on='sample')
         df = df_merged.pivot_table(index='Filo', columns=category, values='valor', aggfunc='sum').reset_index()
-        print(df)
+
         for col in df.columns:
             if col != "Filo":
                 soma = df[col].sum()
@@ -59,7 +64,6 @@ def meta_charts(file, meta_file):
 
         amostras = df.iloc[:, 1:]
         amostras = amostras.T
-
 
         #plt.style.use('ggplot')
 
@@ -81,8 +85,9 @@ def meta_charts(file, meta_file):
         plt.xticks(rotation=45, ha='right')
 
         plt.subplots_adjust(bottom=0.25, right=0.8, top=0.8)
+        plt.tight_layout()
         plt.show()
 
 
-phylum_chart('lib3_stamp.tsv')
-meta_charts('lib3_stamp.tsv', 'meta_v5.tsv')
+phylum_chart('output/LIB3/lib3_stamp.tsv')
+# meta_charts('output/LIB3/lib3_stamp.tsv', 'input/meta_v5.txt')

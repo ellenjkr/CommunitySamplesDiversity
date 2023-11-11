@@ -12,7 +12,7 @@ for folder in $input_folders; do
 		
 		echo $file
 		time blastn \
-		-db /media/bioinfo/6tb_hdd/04_Blast_Databases/BLAST_DB_nt/nt \
+		-db /media/bioinfo/6tb_hdd/04_Blast_Databases/new_nt/nt \
 		-query $file \
 		-outfmt "6 qseqid length score pident stitle sscinames" \
 		-out blast_output/$folder/${filename}_blast.tsv \
