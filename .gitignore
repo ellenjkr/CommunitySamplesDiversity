@@ -2,4 +2,12 @@
 Project/backup/
 Project/input_test/
 Project/output_test/
+Project/blast_output/
+Project/input/
+Project/output/
+Project/madu_temp/
 *.pyc
+Project/build_charts.py
+Project/build_charts.R
+Project/excel_statistics.py
+Project/links.txt
