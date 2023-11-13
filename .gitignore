@@ -1,2 +1,5 @@
 
 Project/backup/
+Project/input_test/
+Project/output_test/
+*.pyc
