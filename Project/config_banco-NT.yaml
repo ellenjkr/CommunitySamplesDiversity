@@ -1,0 +1,4 @@
+INPUT_PATH: INPUT/LIB15/BAC/
+OUTPUT_PATH: OUTPUT/LIB15/BAC/
+TAX_DATABASE_PATH: '/media/bioinfo/6tb_hdd/04_Blast_Databases/taxdb'
+DATABASE_PATH:  /media/bioinfo/6tb_hdd/04_Blast_Databases/new_nt/nt # nt or 16s

@@ -3,8 +3,11 @@ from Bio import SeqIO
 from pathlib import Path
 
 
-def get_df(output_path):
-	df = pd.read_csv(f"{output_path}all_sequences_blast.tsv", sep='\t', names=['qseqid', 'length', 'score', 'pident', 'stitle', 'sscinames'])
+def get_df(output_path, silva):
+	if silva:
+		df = pd.read_csv(f"{output_path}all_sequences_blast.tsv", sep='\t', names=['qseqid', 'length', 'score', 'pident', 'stitle'])
+	else:
+		df = pd.read_csv(f"{output_path}all_sequences_blast.tsv", sep='\t', names=['qseqid', 'length', 'score', 'pident', 'stitle', 'sscinames'])
 	df[['sample_id', 'sequence_id']] = df['qseqid'].str.split('@@', n=1, expand=True)
 
 	return df
@@ -20,14 +23,26 @@ def sep_df_by_sample(df):
 	return samples_dfs
 
 
-def get_statistics(df):
+def get_statistics(df, silva):
 	statistics_dict = {'Blast': []}
 
 	sequences = df.sort_values(by='score', ascending=False).groupby('sequence_id')
 
 	for sequence in sequences.groups.keys():
 		sequence_results = sequences.get_group(sequence)
-		blast_result = str(sequence_results['sscinames'].iloc[0])
+		if silva:
+			blast_result = str(sequence_results['stitle'].iloc[0])
+		else:
+			blast_result = str(sequence_results['sscinames'].iloc[0])
+
+		unwanted_terms = ["vector", "plasmid", "synthetic"]
+		index = 0
+		while any(term in blast_result.lower() for term in unwanted_terms) and index < len(sequence_results) - 1:
+			index += 1
+			if silva:
+				blast_result = str(sequence_results['stitle'].iloc[index])
+			else:
+				blast_result = str(sequence_results['sscinames'].iloc[index])
 
 		statistics_dict['Blast'].append(blast_result)
 
@@ -51,16 +66,17 @@ def build_excel_file(statistics_df, output_file):
 
 
 def run(config):
+	silva = True if 'silva' in config['DATABASE_PATH'].lower() else False
 	output_path = config['OUTPUT_PATH']
 
-	df = get_df(output_path)
+	df = get_df(output_path, silva)
 
 	df.to_csv(f"{output_path}all_sequences.tsv", sep='\t', index=False)
 
 	samples_dfs = sep_df_by_sample(df)
 
 	for sample in samples_dfs.keys():
-		statistics_df = get_statistics(samples_dfs[sample])
+		statistics_df = get_statistics(samples_dfs[sample], silva)
 		build_excel_file(statistics_df, f'{output_path}blast_statistics_{sample}.xlsx')
 		
 

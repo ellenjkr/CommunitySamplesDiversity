@@ -11,3 +11,6 @@ Project/build_charts.py
 Project/build_charts.R
 Project/excel_statistics.py
 Project/links.txt
+Project/INPUT/*
+Project/OUTPUT/*
+Project/.Rhistory

@@ -48,5 +48,5 @@ if __name__ == "__main__":
     )
 
     get_blast_statistics.run(config)
-    generate_tax_file.run(config)
+    # generate_tax_file.run(config)
     

@@ -1,4 +1,4 @@
-INPUT_PATH: input_test
-OUTPUT_PATH: output_test
+INPUT_PATH: INPUT/teste/
+OUTPUT_PATH: OUTPUT/teste/
 TAX_DATABASE_PATH: '/media/bioinfo/6tb_hdd/04_Blast_Databases/taxdb'
-DATABASE_PATH:  /media/bioinfo/6tb_hdd/04_Blast_Databases/16sDB/16S_ribosomal_RNA # nt or 16s
+DATABASE_PATH:  /media/bioinfo/6tb_hdd/04_Blast_Databases/silva/silva # nt or 16s
